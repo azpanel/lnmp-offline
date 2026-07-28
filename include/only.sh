@@ -40,6 +40,7 @@ Install_Only_Nginx()
     Nginx_Dependent
     cd ${cur_dir}/src
     Install_Pcre2
+    cd ${cur_dir}/src
     if [ `grep -L '/usr/local/lib'    '/etc/ld.so.conf'` ]; then
         echo "/usr/local/lib" >> /etc/ld.so.conf
     fi
