@@ -10,7 +10,7 @@ Source_File_Status()
 {
     local source_file="$1"
     if [ ! -s "${cur_dir}/src/${source_file}" ]; then
-        printf ' [Source file missing: %s]' "${source_file}"
+        printf ' \033[0;31m[x Source file missing: %s]\033[0m' "${source_file}"
     fi
 }
 
