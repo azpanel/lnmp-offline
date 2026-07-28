@@ -81,9 +81,10 @@ Init_Install()
     Disable_Selinux
     Check_Download
     Install_Libiconv
-    Install_Libmcrypt
-    Install_Mhash
-    Install_Mcrypt
+    # Legacy PHP 5-only crypto libraries; unnecessary for modern PHP releases.
+    # Install_Libmcrypt
+    # Install_Mhash
+    # Install_Mcrypt
     Install_Freetype
     Install_Pcre2
     Install_Icu4c
