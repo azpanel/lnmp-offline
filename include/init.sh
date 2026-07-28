@@ -441,7 +441,8 @@ Check_Download()
 {
     Echo_Blue "[+] Downloading files..."
     cd ${cur_dir}/src
-    Download_Files ${Download_Mirror}/web/libiconv/${Libiconv_Ver}.tar.gz ${Libiconv_Ver}.tar.gz
+    Require_Source_Archive "${Libiconv_Ver}.tar.gz"
+    Require_Source_Archive "${Freetype_Ver}.tar.xz"
     Download_Files ${Download_Mirror}/web/libmcrypt/${LibMcrypt_Ver}.tar.gz ${LibMcrypt_Ver}.tar.gz
     Download_Files ${Download_Mirror}/web/mcrypt/${Mcypt_Ver}.tar.gz ${Mcypt_Ver}.tar.gz
     Download_Files ${Download_Mirror}/web/mhash/${Mhash_Ver}.tar.bz2 ${Mhash_Ver}.tar.bz2
@@ -491,6 +492,16 @@ Check_Download()
         Download_Files ${Download_Mirror}/web/apache/${APR_Ver}.tar.bz2 ${APR_Ver}.tar.bz2
         Download_Files ${Download_Mirror}/web/apache/${APR_Util_Ver}.tar.bz2 ${APR_Util_Ver}.tar.bz2
     fi
+}
+
+Require_Source_Archive()
+{
+    local archive_name="$1"
+    if [ ! -s "${cur_dir}/src/${archive_name}" ]; then
+        Echo_Red "Error! Required source archive ${archive_name} is missing from ${cur_dir}/src."
+        exit 1
+    fi
+    echo "${archive_name} [found]"
 }
 
 Make_Install()
@@ -580,17 +591,10 @@ Install_Mhash()
 
 Install_Freetype()
 {
-    if echo "${Ubuntu_Version}" | grep -Eqi "^1[89]\.|2[0-9]\." || echo "${Mint_Version}" | grep -Eqi "^19|2[0-9]" || echo "${Deepin_Version}" | grep -Eqi "^15\.[7-9]|15.1[0-9]|1[6-9]|2[0-9]" || echo "${Debian_Version}" | grep -Eqi "^9|1[0-9]" || echo "${Raspbian_Version}" | grep -Eqi "^9|1[0-9]" || echo "${Kali_Version}" | grep -Eqi "^202[0-9]" || echo "${UOS_Version}" | grep -Eqi "^2[0-9]" || echo "${CentOS_Version}" | grep -Eqi "^8|9" || echo "${RHEL_Version}" | grep -Eqi "^8|9" || echo "${Oracle_Version}" | grep -Eqi "^8|9" || echo "${Fedora_Version}" | grep -Eqi "^3[0-9]|29" || echo "${Rocky_Version}" | grep -Eqi "^8|9" || echo "${Alma_Version}" | grep -Eqi "^8|9" || echo "${openEuler_Version}" | grep -Eqi "^2[0-9]" || echo "${Anolis_Version}" | grep -Eqi "^8|9" || echo "${Kylin_Version}" | grep -Eqi "^V1[0-9]" || echo "${Amazon_Version}" | grep -Eqi "^202[3-9]" || echo "${OpenCloudOS_Version}" | grep -Eqi "^8|9|23"; then
-        Download_Files ${Download_Mirror}/lib/freetype/${Freetype_New_Ver}.tar.xz ${Freetype_New_Ver}.tar.xz
-        Echo_Blue "[+] Installing ${Freetype_New_Ver}"
-        Tar_Cd ${Freetype_New_Ver}.tar.xz ${Freetype_New_Ver}
-        ./configure --prefix=/usr/local/freetype --enable-freetype-config
-    else
-        Download_Files ${Download_Mirror}/lib/freetype/${Freetype_Ver}.tar.bz2 ${Freetype_Ver}.tar.bz2
-        Echo_Blue "[+] Installing ${Freetype_Ver}"
-        Tar_Cd ${Freetype_Ver}.tar.bz2 ${Freetype_Ver}
-        ./configure --prefix=/usr/local/freetype
-    fi
+    Require_Source_Archive "${Freetype_Ver}.tar.xz"
+    Echo_Blue "[+] Installing ${Freetype_Ver}"
+    Tar_Cd ${Freetype_Ver}.tar.xz ${Freetype_Ver}
+    ./configure --prefix=/usr/local/freetype --enable-freetype-config
     Make_Install
 
     [[ -d /usr/lib/pkgconfig ]] && \cp /usr/local/freetype/lib/pkgconfig/freetype2.pc /usr/lib/pkgconfig/
@@ -676,8 +680,8 @@ Install_Icu4c()
     if command -v icu-config >/dev/null 2>&1 && icu-config --version | grep -Eq "^3."; then
         Echo_Blue "[+] Installing ${Libicu4c_Ver}"
         cd ${cur_dir}/src
-        Download_Files ${Download_Mirror}/lib/icu4c/${Libicu4c_Ver}-src.tgz ${Libicu4c_Ver}-src.tgz
-        Tar_Cd ${Libicu4c_Ver}-src.tgz icu/source
+        Require_Source_Archive "${Libicu4c_Archive}"
+        Tar_Cd ${Libicu4c_Archive} icu/source
         ./configure --prefix=/usr
         if [ ! -s /usr/include/xlocale.h ]; then
             ln -s /usr/include/locale.h /usr/include/xlocale.h
@@ -691,10 +695,10 @@ Install_Icu4c()
 Install_Icu60()
 {
     if [ ! -s /usr/local/icu/bin/icu-config ]; then
-        Echo_Blue "[+] Installing icu4c-60_3..."
+        Echo_Blue "[+] Installing ${Libicu4c_Ver}..."
         cd ${cur_dir}/src
-        Download_Files ${Download_Mirror}/lib/icu4c/icu4c-60_3-src.tgz icu4c-60_3-src.tgz
-        Tar_Cd icu4c-60_3-src.tgz icu/source
+        Require_Source_Archive "${Libicu4c_Archive}"
+        Tar_Cd ${Libicu4c_Archive} icu/source
         ./configure --prefix=/usr/local/icu
         Make_Install
         cd ${cur_dir}/src/
@@ -810,7 +814,7 @@ Install_Libzip()
         if [ ! -s /usr/local/lib/libzip.so ]; then
             Echo_Blue "[+] Installing ${Libzip_Ver}"
             cd ${cur_dir}/src
-            Download_Files ${Download_Mirror}/lib/libzip/${Libzip_Ver}.tar.xz ${Libzip_Ver}.tar.xz
+            Require_Source_Archive "${Libzip_Ver}.tar.xz"
             Tar_Cd ${Libzip_Ver}.tar.xz ${Libzip_Ver}
             ./configure
             Make_Install
