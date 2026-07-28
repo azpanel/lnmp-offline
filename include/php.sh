@@ -1206,7 +1206,7 @@ EOF
 fi
 }
 
-Install_PHP_82()
+Install_PHP_85()
 {
     Install_Libzip
     Echo_Blue "[+] Installing ${Php_Ver}"
@@ -1238,7 +1238,7 @@ Install_PHP_82()
     Install_Composer
 
     cd ${cur_dir}/src
-    echo "Install ZendGuardLoader for PHP 8.2..."
+    echo "Install ZendGuardLoader for PHP 8.5..."
     echo "unavailable now."
 
 if [ "${Stack}" = "lnmp" ]; then
