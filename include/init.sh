@@ -623,15 +623,16 @@ Install_Curl()
     Remove_Error_Libcurl
 }
 
-Install_Pcre()
+Install_Pcre2()
 {
-    if ! command -v pcre-config >/dev/null 2>&1 || pcre-config --version | grep -vEqi '^8.'; then
-        Echo_Blue "[+] Installing ${Pcre_Ver}"
-        cd ${cur_dir}/src
-        Download_Files ${Download_Mirror}/web/pcre/${Pcre_Ver}.tar.bz2 ${Pcre_Ver}.tar.bz2
-        Tar_Cd ${Pcre_Ver}.tar.bz2
-        Nginx_With_Pcre="--with-pcre=${cur_dir}/src/${Pcre_Ver} --with-pcre-jit"
+    local pcre2_archive="${Pcre2_Ver}.tar.bz2"
+    if [ ! -s "${cur_dir}/src/${pcre2_archive}" ]; then
+        Echo_Red "Error! PCRE2 source archive ${pcre2_archive} is missing from ${cur_dir}/src."
+        exit 1
     fi
+    Echo_Blue "[+] Preparing ${Pcre2_Ver} for Nginx..."
+    Tar_Cd "${pcre2_archive}" "${Pcre2_Ver}"
+    Nginx_With_Pcre="--with-pcre=${cur_dir}/src/${Pcre2_Ver} --with-pcre-jit"
 }
 
 Install_Jemalloc()

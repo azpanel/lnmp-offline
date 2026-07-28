@@ -46,7 +46,7 @@ Upgrade_Nginx()
 
     Install_Nginx_Openssl
     Install_Nginx_Lua
-    Install_Pcre
+    Install_Pcre2
     Install_Ngx_FancyIndex
     Tar_Cd nginx-${Nginx_Version}.tar.gz nginx-${Nginx_Version}
     Get_Dist_Version

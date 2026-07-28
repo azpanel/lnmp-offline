@@ -85,7 +85,7 @@ Init_Install()
     Install_Mhash
     Install_Mcrypt
     Install_Freetype
-    Install_Pcre
+    Install_Pcre2
     Install_Icu4c
     if [ "${SelectMalloc}" = "2" ]; then
         Install_Jemalloc
